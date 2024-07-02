@@ -27,7 +27,7 @@
           color_code_alias: ''
         }
       ])
-
+      
       return {colors}
     },
     created(){
@@ -39,7 +39,9 @@
           .then((response) => {
             return response.json()
           })
-          .then((data) => this.colors = data.colors)
+          .then((data) => {
+            this.colors = data.colors
+          })
           .catch((error) => {
             console.log(error)
           })

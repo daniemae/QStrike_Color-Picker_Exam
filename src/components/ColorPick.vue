@@ -8,9 +8,10 @@
                                     <td class="flex items-center justify-between p-2">
                                           <div class="text-xl">{{ colorData.name }}</div>
                                           <div class="ml-auto">
-                                          <button class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700" @click="getData(colorData)">
-                                                Preview
-                                          </button>
+                                                <button class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700" 
+                                                      @click="getData(colorData)" v-if="colorData.name">
+                                                      Preview
+                                                </button>
                                           </div>
                                     </td>
                               </tr>
@@ -18,13 +19,18 @@
                   </table>
             </div>
             <div :style="`background-color:#${colorObj.hex_code}`">
-                  <div class="flex items-center justify-center h-screen" :style="`color:${this.colorCaption}`">
+                  <div class="flex items-center justify-center h-screen" :style="`color:${colorCaption}`">
                         <div class="text-xl">
-                              name: {{ colorObj.name }}
-                              <br>
-                              hex: {{ colorObj.hex_code }}
-                              <br>
-                              color code: {{ colorObj.color_code }}
+                              <div v-if="colorObj.hex_code">
+                                    name: {{ colorObj.name }}
+                                    <br>
+                                    hex: {{ colorObj.hex_code }}
+                                    <br>
+                                    color code: {{ colorObj.color_code }}
+                              </div>
+                              <div v-else>
+                                    <p>Select color to show information</p>
+                              </div>
                         </div>
                   </div>
             </div>
@@ -42,7 +48,7 @@ export default defineComponent({
             }
       },
       data:() => ({
-            colorObj:{},
+            colorObj:{hex_code:'',name: '', color_code:''},
             colorCaption : ''
       }),
       watch:{
@@ -53,13 +59,13 @@ export default defineComponent({
                         const g = (bigint >> 8) & 255;
                         const b = bigint & 255;
                         const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                        this.colorCaption = brightness > 128 ? 'black' : 'white' //check if the color is light based on brightness
+                        this.colorCaption = brightness > 186 ? 'black' : 'white' //check if the color is light based on brightness
                   }, deep: true
             }
       },
       methods:{
             getData(color: Object){
-                  this.colorObj = color
+                  Object.assign(this.colorObj, color)
             },
       }
 })
