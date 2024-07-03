@@ -2,6 +2,7 @@
   import { defineComponent, ref } from 'vue'
   import ColorPick from './components/ColorPick.vue'
   import Colors from './types/Colors'
+  import Loading from './types/Loading';
 
   export default defineComponent({
     components: {
@@ -27,20 +28,23 @@
           color_code_alias: ''
         }
       ])
+      const isLoading = ref<Loading>(false)
       
-      return {colors}
+      return {colors, isLoading}
     },
     created(){
       this.getColors()
     },
     methods:{
       getColors(){
+        this.isLoading = true
         fetch('https://api.prolook.com/api/colors/prolook')
           .then((response) => {
             return response.json()
           })
           .then((data) => {
             this.colors = data.colors
+            this.isLoading = false
           })
           .catch((error) => {
             console.log(error)
@@ -52,6 +56,6 @@
 
 <template>
   <div>
-    <ColorPick :colorsArr="colors"/>
+    <ColorPick :colorsArr="colors" :loading="isLoading"/>
   </div>
 </template>
